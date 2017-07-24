@@ -1,0 +1,15 @@
+.block{
+    width: 10px;
+    height: 10px;
+    border: #000000;
+    border-width: 1px;
+}
+.emptyBlock{
+    background-color: white;
+}
+.hullBlock{
+    background-color: #09859c;
+}
+.tunnelBlock{
+    background-color: #0e56b1;
+}

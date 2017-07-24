@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Planner - Project Accelerator</title>
+    <script src="src/jquery-3.2.1.min.js"></script>
+    <script src="src/app.js"></script>
+    <link rel="stylesheet" href="css/index.css">
+</head>
+<body style="height: 100%">
+    <table width="100%">
+        <tbody>
+        <tr>
+            <td width="60%">
+                <div align="center" id="divMain"></div>
+
+            </td>
+            <td width="40%" height="100%">
+                <div style="align-content: flex-start;height: 100%">
+                    <br>
+                    <h2>Planner - Project Accelerator</h2>
+                    <input placeholder="Radius" id="inputR">
+                    <button id="btnGen">Generate</button><br>
+                    <input placeholder="kAcceleration" id="inputKA" value="0.0025"><br>
+                    <input placeholder="kOverall" id="inputKO" value="6"><br>
+                    <input placeholder="kFail" id="inputKF" value="0.004"><br>
+                    <input placeholder="kStablizer" id="inputKS" value="0.4"><br>
+                    <input placeholder="kDrag" id="inputKD" value="0.01"><br>
+                    <p id="pOut"></p>
+                </div>
+            </td>
+        </tr>
+        </tbody>
+
+    </table>
+</body>
+</html>
