@@ -20,6 +20,11 @@ $(document).ready(function () {
         var htmlCircleTable = "<table><tbody>";
         var hullCount = 0;
         var tunnelCount = 0;
+
+        var data1=calculateMinEnergy(r,arrCircle,0);
+        var min=data1.min,minE=data1.minE,property=data1.property;
+        var data2=calculateMinEnergy(r,arrCircle,-1);
+        var min2=data2.min,minE2=data2.minE;
         for (var i = 0; i < r * 2 + 5; i++) {
             htmlCircleTable += "<tr>";
             for (var j = 0; j < r * 2 + 5; j++) {
@@ -37,47 +42,17 @@ $(document).ready(function () {
                         hullCount++;
                         hullCount++;
                         tunnelCount++;
-                        posList.push([i, j]);
                         break;
                 }
             }
             htmlCircleTable += "</tr>";
         }
         htmlCircleTable += "</tbody></table>";
+
         $("#divMain").empty().append(htmlCircleTable);
-        $("#pOut").empty().append("Built with " + tunnelCount + " Tunnels and " + hullCount + " Hulls.");
-
-        var property = calcAccProperty(posList);
-        property.drag += Config.kDrag;
         $("#pOut").append("<br>Drag = " + property.drag + "<br>Fail rate = " + property.failrate * 100 + "%");
-        var min = 1e15, minE = 0;
-        var min2 = 1e15, minE2 = 0;
-        var n = 0;
-        for (var i = 1; i <= 32768; i += 1) {
-            var a = calculateAcceleration(property.drag, i, Config.kAcceleration, Config.kOverall, 0, property.failrate, 0);
-            var a2 = calculateAcceleration(property.drag, i, Config.kAcceleration, Config.kOverall, 0, 0, 0);
-            var t = 100 / a;
-            var totEU = t * i;
-            var t2 = 100 / a2;
-            var totEU2 = t2 * i;
-            if (totEU > 0 && totEU < min) {
-                min = totEU;
-                minE = i;
-            }
-            if (totEU2 > 0 && totEU2 < min2) {
-                min2 = totEU2;
-                minE2 = i;
-            }
-
-        }
-        var rt = property.failrate;
-        while (rt > 0) {
-            rt *= Config.kStabilizer;
-            rt -= 0.01;
-            n++;
-        }
-        console.log("Best = " + min + " at " + minE + " EU/t , Best(NEED " + n + ") = " + min2 + " at " + minE2 + " EU/t");
-        $("#pOut").append("<br>Best = " + min + " at " + minE + " EU/t<br>Best(NEED " + n + ") = " + min2 + " at " + minE2 + " EU/t");
+        $("#pOut").empty().append("Built with " + tunnelCount + " Tunnels and " + hullCount + " Hulls.");
+        $("#pOut").append("<br>Best = " + min + " at " + minE + " EU/t<br>Best(0 Fail) = " + min2 + " at " + minE2 + " EU/t");
     });
 
     $("#btnAna").click(function () {
@@ -142,4 +117,36 @@ var calculateAcceleration=function(drag, eu, kAcceleration, kOverall, numStabili
     var r = failrate;
     //if(worldObj.getWorldTime()%20==0)System.out.println(String.valueOf(r));
     return kOverall * (kAcceleration * Math.sqrt(eu) * (1 - (r > 0 ? r : 0)) - drag);
+};
+
+var calculateMinEnergy=function (r,arrCircle,stabNum) {
+    var posList=new Array();
+    for (var i = 0; i < r * 2 + 5; i++)
+        for (var j = 0; j < r * 2 + 5; j++)
+            if(arrCircle[i][j]==2)
+                posList.push([i, j]);
+    var property = calcAccProperty(posList);
+    property.drag += Config.kDrag;
+
+    var min = 1e15, minE = 0;
+
+    rt=property.failrate;
+    for(var j=0;j<stabNum;j++){
+        rt *= Config.kStabilizer;
+        rt -= 0.01;
+        n++;
+    }
+    if (rt<0)rt=0;
+    if(stabNum<0)rt=0;
+    for (var i = 1; i <= 100000; i += 1) {
+        var a = calculateAcceleration(property.drag, i, Config.kAcceleration, Config.kOverall, 0, rt, 0);
+        //var a2 = calculateAcceleration(property.drag, i, Config.kAcceleration, Config.kOverall, 0, 0, 0);
+        var t = 100 / a;
+        var totEU = t * i;
+        if (totEU > 0 && totEU < min) {
+            min = totEU;
+            minE = i;
+        }
+    }
+    return {property:property,min:min,minE:minE};
 };
