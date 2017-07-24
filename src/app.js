@@ -65,7 +65,6 @@ $(document).ready(function () {
                minE2=i;
            }
 
-
        }
        var rt=property.failrate;
        while(rt>0){
