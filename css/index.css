@@ -13,3 +13,10 @@
 .tunnelBlock{
     background-color: #0e56b1;
 }
+
+.analyzeTable{
+    border: 1px solid;
+    border-collapse: collapse;
+    border-color: black;
+    margin-top: 40px;
+}

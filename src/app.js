@@ -15,16 +15,15 @@ $(document).ready(function () {
     $("#btnGen").click(function () {
         var r = parseInt($("#inputR").val());
         readConfig();
-        var posList = [];
         var arrCircle = genCircleArray(r);
         var htmlCircleTable = "<table><tbody>";
         var hullCount = 0;
         var tunnelCount = 0;
-
         var data1=calculateMinEnergy(r,arrCircle,0);
         var min=data1.min,minE=data1.minE,property=data1.property;
         var data2=calculateMinEnergy(r,arrCircle,-1);
         var min2=data2.min,minE2=data2.minE;
+
         for (var i = 0; i < r * 2 + 5; i++) {
             htmlCircleTable += "<tr>";
             for (var j = 0; j < r * 2 + 5; j++) {
@@ -50,13 +49,24 @@ $(document).ready(function () {
         htmlCircleTable += "</tbody></table>";
 
         $("#divMain").empty().append(htmlCircleTable);
-        $("#pOut").append("<br>Drag = " + property.drag + "<br>Fail rate = " + property.failrate * 100 + "%");
         $("#pOut").empty().append("Built with " + tunnelCount + " Tunnels and " + hullCount + " Hulls.");
+
+        $("#pOut").append("<br>Drag = " + property.drag + "<br>Fail rate = " + property.failrate * 100 + "%");
         $("#pOut").append("<br>Best = " + min + " at " + minE + " EU/t<br>Best(0 Fail) = " + min2 + " at " + minE2 + " EU/t");
     });
 
     $("#btnAna").click(function () {
 
+        readConfig();
+        var htmlOutput="<table class='analyzeTable' cellspacing='0' border='1px' width='70%'><tr><th>Radius</th><th>Min Energy</th><th>Min EU/t</th><th>Min Energy(0%)</th><th>Min EU/t(0%)</th></tr>";
+        for (var r=2;r<32;r++) {
+            var arrCircle = genCircleArray(r);
+            var data1 = calculateMinEnergy(r, arrCircle, 0);
+            var data2 = calculateMinEnergy(r, arrCircle, -1);
+            htmlOutput+="<tr><td>"+r+"</td><td>"+(data1.min==1e15?"Impossible":data1.min)+"</td><td>"+data1.minE+"</td><td>"+(data2.min==1e15?"Impossible":data2.min)+"</td><td>"+data2.minE+"</td></tr>";
+        }
+        htmlOutput+="</table>";
+        $("#divMain").empty().append(htmlOutput);
     })
 });
 
@@ -148,5 +158,6 @@ var calculateMinEnergy=function (r,arrCircle,stabNum) {
             minE = i;
         }
     }
+    min=Math.round(min);
     return {property:property,min:min,minE:minE};
 };
