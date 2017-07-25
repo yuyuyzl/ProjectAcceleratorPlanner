@@ -1,8 +1,7 @@
 .block{
     width: 10px;
     height: 10px;
-    border: #000000;
-    border-width: 1px;
+
 }
 .emptyBlock{
     background-color: white;
