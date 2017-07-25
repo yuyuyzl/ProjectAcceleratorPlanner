@@ -193,7 +193,7 @@ var calculateMinEnergy=function (r,arrCircle,stabNum) {
     };
 
     var triSearch=function (l,r) {
-        if(r-l<1){
+        if(r-l<0.1){
             return{minE:Math.round(l),min:getans(l)}
         }
         var mid=l+r;
