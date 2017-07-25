@@ -48,18 +48,26 @@ $(document).ready(function () {
         }
         htmlCircleTable += "</tbody></table>";
 
-        $("#divMain").empty().append(htmlCircleTable);
+        $("#divMain").html(htmlCircleTable);
         $("#pOut").empty().append("Built with " + tunnelCount + " Tunnels and " + hullCount + " Hulls.");
 
         $("#pOut").append("<br>Drag = " + property.drag + "<br>Fail rate = " + property.failrate * 100 + "%");
         $("#pOut").append("<br>Best = " + min + " at " + minE + " EU/t<br>Best(0 Fail) = " + min2 + " at " + minE2 + " EU/t");
+    });
+    $("#btnplusGen").click(function () {
+        $("#inputR").val(parseInt($("#inputR").val())+1);
+        $("#btnGen").click();
+    });
+    $("#btnminusGen").click(function () {
+        $("#inputR").val(parseInt($("#inputR").val())-1);
+        $("#btnGen").click();
     });
 
     $("#btnAna").click(function () {
 
         readConfig();
         var htmlOutput="<table class='analyzeTable' cellspacing='0' border='1px' width='70%'><tr><th>Radius</th><th>Min Energy</th><th>Min EU/t</th><th>Min Energy(0%)</th><th>Min EU/t(0%)</th></tr>";
-        for (var r=2;r<32;r++) {
+        for (var r=2;r<65;r++) {
             var arrCircle = genCircleArray(r);
             var data1 = calculateMinEnergy(r, arrCircle, 0);
             var data2 = calculateMinEnergy(r, arrCircle, -1);
