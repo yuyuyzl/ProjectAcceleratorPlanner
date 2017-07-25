@@ -188,13 +188,13 @@ var calculateMinEnergy=function (r,arrCircle,stabNum) {
         //var a2 = calculateAcceleration(property.drag, i, Config.kAcceleration, Config.kOverall, 0, 0, 0);
         var t = 100 / a;
         var totEU = t * i;
-        totEU=Math.round(totEU);
+        totEU=totEU;
         return totEU>0?totEU:1e15;
     };
 
     var triSearch=function (l,r) {
         if(r-l<0.1){
-            return{minE:Math.round(l),min:getans(l)}
+            return{minE:Math.round(l),min:Math.round(getans(l))}
         }
         var mid=l+r;
         mid/=2;
@@ -206,6 +206,8 @@ var calculateMinEnergy=function (r,arrCircle,stabNum) {
         else return triSearch(l,midmid);
 
     };
-    var a=triSearch(1,1000000);
+    var a=triSearch(0,10000000);
+
+
     return {property:property,min:a.min,minE:a.minE};
 };
